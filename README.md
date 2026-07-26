@@ -108,25 +108,4 @@ To rebuild images after making changes:
 docker compose up --build
 ```
 
-## Kubernetes
-
-Kubernetes manifests are available in the `k8s/` directory.
-
-Deploy the application:
-
-```bash
-kubectl apply -f k8s/
-```
-
-## Future Improvements
-
-* Authentication and authorization
-* Real-time job status updates (WebSockets/SSE)
-* S3-compatible object storage
-* Horizontal scaling of OCR workers
-* Monitoring with Prometheus and Grafana
-* CI/CD pipeline
-
-## License
-
 This project is intended for learning and experimentation with Rust microservices, asynchronous processing, Docker, Kubernetes, and distributed system design.
