@@ -1,0 +1,12 @@
+[package]
+name = "job-queue"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.8.8", features = ["multipart", "macros"] }
+serde = { version = "1", features = ["derive"] }
+dotenvy = "0.15"
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "macros", "uuid"] }
+uuid = "1.23.0"

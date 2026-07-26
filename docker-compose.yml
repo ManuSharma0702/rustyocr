@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+
+  file-upload-service:
+    build:
+      context: ./file-upload-service
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./file-upload-service/.env
+    depends_on:
+      - aggregator-service
+
+  aggregator-service:
+    build:
+      context: ./aggregator-service
+    env_file:
+      - ./aggregator-service/.env
+    depends_on:
+      - file-split-service
+      - job-queue
+      - ocr-service
+
+  file-split-service:
+    build:
+      context: ./file-split-service
+    env_file:
+      - ./file-split-service/.env
+
+  job-queue:
+    build:
+      context: ./job-queue
+    env_file:
+      - ./job-queue/.env
+
+  ocr-service:
+    build:
+      context: ./ocr-service
+    env_file:
+      - ./ocr-service/.env
+  ui:
+    build:
+      context: ./ui
+    env_file:
+      - ./ui/.env
+    ports:
+      - "3000:80"
+

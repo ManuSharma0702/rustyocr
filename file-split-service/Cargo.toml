@@ -1,0 +1,15 @@
+[package]
+name = "file-split-service"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "multipart", "stream"] }
+serde = { version = "1", features = ["derive"] }
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "macros", "uuid"] }
+uuid = "1.23.0"
+aws-config = { version = "1.1", features = ["behavior-version-latest"] }
+aws-sdk-s3 = "1.17"
+lopdf = "0.40.0"
+dotenvy = "0.15"

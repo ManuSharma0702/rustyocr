@@ -1,0 +1,6 @@
+target
+.git
+files
+*.log
+.env
+tmp
