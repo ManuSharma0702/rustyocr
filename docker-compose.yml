@@ -3,8 +3,7 @@ version: "3.9"
 services:
 
   file-upload-service:
-    build:
-      context: ./file-upload-service
+    image: ghcr.io/manusharma0702/rustyocr-file-split-service:latest
     ports:
       - "8000:8000"
     env_file:
@@ -13,8 +12,7 @@ services:
       - aggregator-service
 
   aggregator-service:
-    build:
-      context: ./aggregator-service
+    image: ghcr.io/manusharma0702/rustyocr-aggregator-service:latest
     env_file:
       - ./aggregator-service/.env
     depends_on:
@@ -23,25 +21,21 @@ services:
       - ocr-service
 
   file-split-service:
-    build:
-      context: ./file-split-service
+    image: ghcr.io/manusharma0702/rustyocr-file-split-service:latest
     env_file:
       - ./file-split-service/.env
 
   job-queue:
-    build:
-      context: ./job-queue
+    image: ghcr.io/manusharma0702/rustyocr-job-queue:latest
     env_file:
       - ./job-queue/.env
 
   ocr-service:
-    build:
-      context: ./ocr-service
+    image: ghcr.io/manusharma0702/rustyocr-ocr-service:latest
     env_file:
       - ./ocr-service/.env
   ui:
-    build:
-      context: ./ui
+    image: ghcr.io/manusharma0702/rustyocr-ui:latest
     env_file:
       - ./ui/.env
     ports:
