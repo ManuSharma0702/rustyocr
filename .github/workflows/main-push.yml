@@ -18,11 +18,6 @@ jobs:
       packages: write
 
     steps:
-      - name: Debug
-        run: |
-          echo "Actor=$GITHUB_ACTOR"
-          echo "Repository=$GITHUB_REPOSITORY"
-          echo "Owner=$GITHUB_REPOSITORY_OWNER"
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -30,9 +25,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN || secrets.GITHUB_TOKEN }}
-
+          username: ManuSharma0702
+          password: ${{ secrets.GHCR_TOKEN }}
       - name: Build and Push Aggregator Service
         uses: docker/build-push-action@v6
         with:
