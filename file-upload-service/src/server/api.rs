@@ -88,7 +88,6 @@ async fn get_job_status(
     if data.0.eq("completed") {
         //Get the temporary file url from s3 and return that to the user
         let download_url = get_file_from_s3(&state.s3_client, &data.1, "fileocr").await?;
-        println!("File ready");
         return Ok(extract::Json(JobStatus {
             status: data.0,
             download_url: Some(download_url)
