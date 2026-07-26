@@ -1,0 +1,77 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_OWNER: ${{ github.repository_owner }}
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Aggregator Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./aggregator-service
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/rustyocr-aggregator-service:latest
+
+      - name: Build and Push File Split Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./file-split-service
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/rustyocr-file-split-service:latest
+
+      - name: Build and Push File Upload Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./file-upload-service
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/rustyocr-file-upload-service:latest
+
+      - name: Build and Push OCR Service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./ocr-service
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/rustyocr-ocr-service:latest
+
+      - name: Build and Push Job Queue
+        uses: docker/build-push-action@v6
+        with:
+          context: ./job-queue
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/rustyocr-job-queue:latest
+
+      - name: Build and Push UI
+        uses: docker/build-push-action@v6
+        with:
+          context: ./ui
+          push: true
+          tags: |
+            ghcr.io/${{ env.IMAGE_OWNER }}/rustyocr-ui:latest
