@@ -3,7 +3,7 @@ version: "3.9"
 services:
 
   file-upload-service:
-    image: ghcr.io/manusharma0702/rustyocr-file-split-service:latest
+    image: ghcr.io/manusharma0702/rustyocr-file-upload-service:latest
     ports:
       - "8000:8000"
     env_file:
