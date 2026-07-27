@@ -12,15 +12,29 @@ pub async fn upload_to_s3(
 ) -> Result<String, FileUploadError> {
     let key = file.file_key.clone();
 
-    s3_client
+    match s3_client
         .put_object()
         .bucket(bucket_name)
         .key(&key)
         .body(ByteStream::from(file.file_data))
         .send()
         .await
-        .map_err(|e| FileUploadError::S3UploadFailed(e.to_string()))?;
+    {
+        Ok(_) => {}
+        Err(e) => {
+            eprintln!("AWS ERROR: {:#?}", e);
 
+            let mut source = std::error::Error::source(&e);
+            while let Some(err) = source {
+                eprintln!("Caused by: {}", err);
+                source = err.source();
+            }
+
+            return Err(FileUploadError::S3UploadFailed(format!("{:#?}", e)));
+        }
+    }
+
+    println!("Pushed to s3");
     let presigned_req = s3_client
         .get_object()
         .bucket(bucket_name)
