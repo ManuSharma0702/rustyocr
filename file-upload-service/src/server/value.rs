@@ -9,6 +9,7 @@ use uuid::Uuid;
 
 use crate::job_upload_service::api::Task;
 
+#[derive(Debug)]
 pub enum JobCreationError {
     Failed,
     AlreadyExists,
@@ -31,6 +32,7 @@ impl Display for JobCreationError {
     }
 }
 
+#[derive(Debug)]
 pub enum FileUploadError {
     JobCreationError(JobCreationError),
     S3UploadFailed(String),
