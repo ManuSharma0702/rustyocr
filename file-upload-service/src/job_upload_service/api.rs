@@ -62,6 +62,7 @@ impl UploadService {
                 success.push(uuid);
             },
             Err(e) => {
+                eprintln!("Queue request failed: {:#?}", e);
                 let _ = job_enqueue_fail(&self.db, &payload.job_id).await.map_err(|e| UploadError::UploadFailed(e.to_string()));
                 return Err(UploadError::UploadFailed(e.to_string()));
             }
