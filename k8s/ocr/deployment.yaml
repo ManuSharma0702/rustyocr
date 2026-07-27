@@ -17,10 +17,15 @@ spec:
         app: ocr-service
 
     spec:
+      imagePullSecrets:
+      - name: ghcr-secret
       containers:
       - name: ocr-service
         image: ghcr.io/manusharma0702/rustyocr-ocr-service:latest
         imagePullPolicy: Always
+        envFrom:
+          - secretRef:
+              name: creds
 
         resources:
           requests:

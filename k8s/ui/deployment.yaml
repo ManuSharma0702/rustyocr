@@ -19,10 +19,15 @@ spec:
         app: ui
 
     spec:
+      imagePullSecrets:
+      - name: ghcr-secret
       containers:
         - name: ui
           image: ghcr.io/manusharma0702/rustyocr-ui:latest
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: creds
 
           ports:
             - containerPort: 80

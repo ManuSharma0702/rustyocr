@@ -18,10 +18,15 @@ spec:
         app: job-queue
 
     spec:
+      imagePullSecrets:
+      - name: ghcr-secret
       containers:
         - name: job-queue
           image: ghcr.io/manusharma0702/rustyocr-job-queue:latest
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: creds
 
           ports:
             - containerPort: 8080

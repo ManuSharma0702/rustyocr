@@ -17,10 +17,15 @@ spec:
         app: file-split-service
 
     spec:
+      imagePullSecrets:
+      - name: ghcr-secret
       containers:
       - name: file-split-service
         image: ghcr.io/manusharma0702/rustyocr-file-split-service:latest
         imagePullPolicy: Always
+        envFrom:
+          - secretRef:
+              name: creds
 
         resources:
           requests:

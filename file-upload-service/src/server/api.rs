@@ -119,6 +119,7 @@ async fn handle_file_upload(
             val
         },
         Err(e) => {
+            eprintln!("S3 upload failed: {:?}", e);
             let _ = update_status_of_job(&state.db_conn, &job_id, "dead".to_string()).await;
             return Err(e);
         }

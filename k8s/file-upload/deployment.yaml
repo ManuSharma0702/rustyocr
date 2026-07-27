@@ -18,10 +18,15 @@ spec:
         app: file-upload-service
 
     spec:
+      imagePullSecrets:
+      - name: ghcr-secret
       containers:
         - name: file-upload-service
           image: ghcr.io/manusharma0702/rustyocr-file-upload-service:latest
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: creds
 
           ports:
             - containerPort: 8000
