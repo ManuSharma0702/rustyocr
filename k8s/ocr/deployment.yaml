@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: ocr-service
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: ocr-service
+
+  template:
+    metadata:
+      labels:
+        app: ocr-service
+
+    spec:
+      containers:
+      - name: ocr-service
+        image: ghcr.io/manusharma0702/rustyocr-ocr-service:latest
+        imagePullPolicy: Always
+
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+
+          limits:
+            cpu: "1"
+            memory: "1Gi"

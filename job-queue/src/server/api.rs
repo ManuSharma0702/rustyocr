@@ -29,7 +29,7 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
     };
 
     let app = Router::new()
-        .route("/", get(handle_root))
+        .route("/health", get(handle_root))
         .route("/task", get(get_task))
         .route("/push", post(push_task))
         .with_state(state);
@@ -40,8 +40,8 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-async fn handle_root() -> &'static str {
-    "Hello job queue"
+async fn handle_root() -> StatusCode {
+    StatusCode::OK
 }
 
 async fn get_task(

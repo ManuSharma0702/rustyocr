@@ -52,8 +52,9 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
     };
     
     let cors = CorsLayer::new()
-        .allow_origin("http://localhost:5173".parse::<axum::http::HeaderValue>().unwrap())
-        .allow_origin("http://localhost:3000".parse::<axum::http::HeaderValue>().unwrap())
+        .allow_origin(
+            ["http://localhost:5173".parse::<axum::http::HeaderValue>().unwrap(),
+            "http://localhost:3000".parse::<axum::http::HeaderValue>().unwrap()])
         .allow_methods([
             Method::GET,
             Method::POST,
@@ -64,7 +65,7 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
         ]);
 
     let app = Router::new()
-        .route("/", get(handle_home))
+        .route("/health", get(handle_home))
         .route("/upload", post(handle_file_upload))
         .route("/jobs/{job_id}", get(get_job_status))
         .layer(cors)
@@ -76,8 +77,8 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-async fn handle_home() -> &'static str {
-    "Hello API"
+async fn handle_home() -> StatusCode {
+    StatusCode::OK
 }
 
 async fn get_job_status(

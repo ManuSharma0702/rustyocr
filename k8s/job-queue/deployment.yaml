@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-queue
+  labels:
+    app: job-queue
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: job-queue
+
+  template:
+    metadata:
+      labels:
+        app: job-queue
+
+    spec:
+      containers:
+        - name: job-queue
+          image: ghcr.io/manusharma0702/rustyocr-job-queue:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8080
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20

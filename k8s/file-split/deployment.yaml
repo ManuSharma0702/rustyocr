@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: file-split-service
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: file-split-service
+
+  template:
+    metadata:
+      labels:
+        app: file-split-service
+
+    spec:
+      containers:
+      - name: file-split-service
+        image: ghcr.io/manusharma0702/rustyocr-file-split-service:latest
+        imagePullPolicy: Always
+
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+
+          limits:
+            cpu: "1"
+            memory: "1Gi"
