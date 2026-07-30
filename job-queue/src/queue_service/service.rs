@@ -4,7 +4,7 @@ use sqlx::{Pool, Postgres};
 use tokio::sync::mpsc::{self, Receiver, Sender};
 use uuid::Uuid;
 
-use crate::{queue_service::value::QueueServiceError, server::value::{Task, TaskType}};
+use crate::{metrics::metrics::record_task, queue_service::value::QueueServiceError, server::value::{Task, TaskType}};
 
 pub struct TaskQueues {
     pending: VecDeque<Task>,
@@ -106,6 +106,7 @@ impl QueueService {
             let queue = self.queues.get_mut(&task_type)
                 .ok_or(QueueServiceError::QueueNotFound)?;
             queue.pending.push_back(task);
+            record_task(&task_type.to_string());
             dbg!("length of queue: {} is: {}", &task_type, queue.pending.len());
         }
 

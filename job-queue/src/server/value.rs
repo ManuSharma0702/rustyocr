@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use axum::{http::StatusCode, response::IntoResponse};
 use serde::{Deserialize, Serialize};
 use sqlx::{Pool, Postgres};
@@ -129,6 +131,16 @@ impl Task {
                 Ok(())
             }
             
+        }
+    }
+}
+
+impl Display for TaskType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            TaskType::Ocr => write!(f, "ocr"),
+            TaskType::Aggregate => write!(f, "aggregate"),
+            TaskType::Split => write!(f, "split"),
         }
     }
 }

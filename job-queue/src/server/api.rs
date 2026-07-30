@@ -4,7 +4,7 @@ use dotenvy::dotenv;
 use sqlx::postgres::PgPoolOptions;
 use tokio::sync::oneshot;
 
-use crate::{queue_service::service::{QueueOperation, QueuePayload, QueueService}, server::value::{AppState, GetQueryParams, JobQueueError, Task, TaskType}};
+use crate::{metrics::{metrics, metrics_endpoint::metrics_router}, queue_service::service::{QueueOperation, QueuePayload, QueueService}, server::value::{AppState, GetQueryParams, JobQueueError, Task, TaskType}};
 
 pub async fn run() -> Result<(), Box<dyn Error>> {
     //Initialise queue service, with three queue for each task type.
@@ -23,6 +23,8 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
         qs.execute().await;
     });
 
+    metrics::init_metrics();
+
     let state = AppState {
         queue_sender: sender,
         db_conn: db
@@ -32,7 +34,8 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
         .route("/health", get(handle_root))
         .route("/task", get(get_task))
         .route("/push", post(push_task))
-        .with_state(state);
+        .with_state(state)
+        .merge(metrics_router());
     
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await?;
     println!("Job Queue running on 127.0.0.1:8080...");
