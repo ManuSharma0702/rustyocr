@@ -106,6 +106,7 @@ impl QueueService {
             let queue = self.queues.get_mut(&task_type)
                 .ok_or(QueueServiceError::QueueNotFound)?;
             queue.pending.push_back(task);
+            dbg!("length of queue: {} is: {}", &task_type, queue.pending.len());
         }
 
         Ok(())
