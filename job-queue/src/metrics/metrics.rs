@@ -2,16 +2,16 @@
 // Define application metrics using prometheus crate
 
 use lazy_static::lazy_static;
-use prometheus::{IntCounterVec, Opts, Registry};
+use prometheus::{IntGaugeVec, Opts, Registry};
 
 // Create a custom registry (optional, can use default)
 lazy_static! {
     pub static ref REGISTRY: Registry = Registry::new();
     
-    pub static ref QUEUE_TASK_COUNT: IntCounterVec = IntCounterVec::new(
+    pub static ref QUEUE_TASK_COUNT: IntGaugeVec = IntGaugeVec::new(
         Opts::new(
-            "queue_task_count",
-            "Qeuue task count by task type"
+            "job_queue_depth",
+            "Number of jobs waiting in each queue"
         ),
         &["task_type"]
     ).expect("metric can be created");
@@ -25,10 +25,10 @@ pub fn init_metrics() {
 }
 
 // Usage examples
-pub fn record_task(task_type: &str) {
+pub fn record_task(task_type: &str, depth: i64) {
     // Increment labeled counter
     QUEUE_TASK_COUNT
         .with_label_values(&[task_type])
-        .inc();
+        .set(depth);
 }
 

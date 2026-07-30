@@ -145,6 +145,17 @@ impl Display for TaskType {
     }
 }
 
+impl TaskType {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            TaskType::Split => "split",
+            TaskType::Ocr => "ocr",
+            TaskType::Aggregate => "aggregate",
+        }
+    }
+
+}
+
 pub enum JobQueueError {
     UnexpectedError(String),
     GetTaskCallFailed

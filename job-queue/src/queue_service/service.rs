@@ -106,7 +106,7 @@ impl QueueService {
             let queue = self.queues.get_mut(&task_type)
                 .ok_or(QueueServiceError::QueueNotFound)?;
             queue.pending.push_back(task);
-            record_task(&task_type.to_string());
+            record_task(task_type.as_str(), queue.pending.len() as i64);
             dbg!("length of queue: {} is: {}", &task_type, queue.pending.len());
         }
 
@@ -122,6 +122,7 @@ impl QueueService {
         let task = queue.pending.pop_front();
         //Cannot take ownership of Task fields and pass it to inprogress queue, since we need to return the
         //Task back to the caller
+        record_task(task_type.as_str(), queue.pending.len() as i64);
         if let Some(ref t) = task {
             queue.in_progress.push_back(t.clone());
         }
