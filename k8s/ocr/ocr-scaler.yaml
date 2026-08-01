@@ -1,0 +1,25 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+
+metadata:
+  name: ocr-service-scaler
+  namespace: default
+
+spec:
+  scaleTargetRef:
+    name: ocr-service
+
+  pollingInterval: 5
+  cooldownPeriod: 60
+
+  minReplicaCount: 1
+  maxReplicaCount: 20
+
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-service.default.svc.cluster.local
+        metricName: ocr_queue_depth
+        query: |
+          sum(job_queue_depth{task_type="ocr"})
+        threshold: "10"
