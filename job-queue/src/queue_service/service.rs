@@ -122,7 +122,7 @@ impl QueueService {
         let task = queue.pending.pop_front();
         //Cannot take ownership of Task fields and pass it to inprogress queue, since we need to return the
         //Task back to the caller
-        // record_task(task_type.as_str(), queue.pending.len() as i64);
+        record_task(task_type.as_str(), queue.pending.len() as i64);
         if let Some(ref t) = task {
             queue.in_progress.push_back(t.clone());
         }
